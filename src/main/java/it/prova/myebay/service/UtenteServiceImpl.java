@@ -24,8 +24,7 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Utente> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Utente>) repository.findAll();
 	}
 
 	@Override
@@ -69,8 +68,7 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Utente> findByExample(Utente example) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByExample(example);
 	}
 
 	@Override

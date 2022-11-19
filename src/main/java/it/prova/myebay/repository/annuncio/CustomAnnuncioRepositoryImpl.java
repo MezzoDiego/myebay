@@ -33,10 +33,10 @@ public class CustomAnnuncioRepositoryImpl implements CustomAnnuncioRepository{
 			whereClauses.add(" a.prezzo >= :prezzo ");
 			paramaterMap.put("prezzo", example.getPrezzo());
 		}
-//		if (example.getCategorie() != null && !example.getCategorie().isEmpty()) {
-//			whereClauses.add("c in :categorie ");
-//			paramaterMap.put("categorie", example.getCategorie());
-//		}
+		if (example.getCategorie() != null && !example.getCategorie().isEmpty()) {
+			whereClauses.add("c in :categorie ");
+			paramaterMap.put("categorie", example.getCategorie());
+		}
 		
 		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));

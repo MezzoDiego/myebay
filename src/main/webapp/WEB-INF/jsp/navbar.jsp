@@ -21,22 +21,12 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
             <ul class="dropdown-menu" aria-labelledby="dropdown07">
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Home</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/annuncio/search">Ricerca annuncio</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Ricerca annuncio</a></li>
             	<sec:authorize access="isAuthenticated()">
             		<li><a class="dropdown-item" href="${pageContext.request.contextPath}/acquisto">Acquisti effettuati</a></li>
             	</sec:authorize>
             </ul> 
           </li>
-          <sec:authorize access="isAuthenticated()">
-          <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Annunci</a>
-		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/annuncio/search">Ricerca Annunci</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/annuncio/insert">Inserisci Annuncio</a>
-		        </div>
-		      </li>
-          </sec:authorize>
            <sec:authorize access="hasRole('ADMIN')">
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
