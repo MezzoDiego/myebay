@@ -1,5 +1,6 @@
 package it.prova.myebay.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,7 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	@Transactional(readOnly = true)
 	public Utente caricaSingoloElemento(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -44,7 +44,11 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	@Transactional
 	public void inserisciNuovo(Utente utenteInstance) {
-		// TODO Auto-generated method stub
+		utenteInstance.setStato(StatoUtente.CREATO);
+		utenteInstance.setCreditoResiduo(5000);
+		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword())); 
+		utenteInstance.setDateCreated(new Date());
+		repository.save(utenteInstance);
 		
 	}
 

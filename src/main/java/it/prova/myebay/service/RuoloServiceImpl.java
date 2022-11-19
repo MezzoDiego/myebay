@@ -39,7 +39,7 @@ public class RuoloServiceImpl implements RuoloService{
 	@Override
 	@Transactional
 	public void inserisciNuovo(Ruolo ruoloInstance) {
-		// TODO Auto-generated method stub
+		repository.save(ruoloInstance);
 		
 	}
 
