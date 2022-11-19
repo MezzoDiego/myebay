@@ -54,6 +54,11 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	public List<Annuncio> findByExample(Annuncio example) {
 		return repository.findByExample(example);
 	}
+
+	@Override
+	public List<Annuncio> findByExampleEager(Annuncio example) {
+		return repository.findByExampleEager(example);
+	}
 	
 	
 }
