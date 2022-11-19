@@ -65,7 +65,7 @@
 			    <div class='card-header text-center'>
 			        <h5>Ricerca Annunci</h5> 
 			    </div>
-			    <div class='card-body'>
+			    <div class='card-body '>
 	
 						<form method="post" action="${pageContext.request.contextPath}/annuncio/list" class="row g-3">
 						

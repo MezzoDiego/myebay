@@ -56,4 +56,9 @@ public class RuoloServiceImpl implements RuoloService{
 		return repository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
+	@Override
+	public List<Ruolo> cercaRuoliByIds(Long[] ids) {
+		return repository.findAllRuoliByIds(ids);
+	}
+
 }

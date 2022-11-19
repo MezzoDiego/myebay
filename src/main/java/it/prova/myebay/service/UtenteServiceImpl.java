@@ -61,8 +61,7 @@ public class UtenteServiceImpl implements UtenteService{
 	@Override
 	@Transactional(readOnly = true)
 	public Utente caricaSingoloUtenteConRuoli(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByIdConRuoli(id).orElse(null);
 	}
 
 	@Override

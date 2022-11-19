@@ -2,13 +2,16 @@ package it.prova.myebay.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import it.prova.myebay.dto.RuoloDTO;
 import it.prova.myebay.dto.UtenteDTO;
 import it.prova.myebay.model.Utente;
 import it.prova.myebay.service.RuoloService;
@@ -50,6 +53,15 @@ public class UtenteController {
 	public String cambiaStato(@RequestParam(name = "idUtenteForChangingStato", required = true) Long idUtente) {
 		utenteService.changeUserAbilitation(idUtente);
 		return "redirect:/utente";
+	}
+	
+	@GetMapping("/show/{idUtente}")
+	public String showUtente(@PathVariable(required = true) Long idUtente, Model model) {
+		Utente utenteModel = utenteService.caricaSingoloUtenteConRuoli(idUtente);
+		UtenteDTO result = UtenteDTO.buildUtenteDTOFromModel(utenteModel, true);
+		model.addAttribute("show_utente_attr", result);
+		model.addAttribute("ruoli_utente_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.cercaRuoliByIds(result.getRuoliIds())));
+		return "utente/show";
 	}
 	
 }
