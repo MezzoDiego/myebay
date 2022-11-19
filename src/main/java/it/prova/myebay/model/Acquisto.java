@@ -26,13 +26,18 @@ public class Acquisto {
 	private Date data;
 	@Column(name = "prezzo")
 	private Integer prezzo;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id", nullable = false)
 	private Utente utente;
 
 	public Acquisto() {
 		super();
+	}
+
+	public Acquisto(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public Acquisto(Long id, String descrizione, Date data, Integer prezzo, Utente utente) {
@@ -90,8 +95,5 @@ public class Acquisto {
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
-	
-	
-	
-	
+
 }

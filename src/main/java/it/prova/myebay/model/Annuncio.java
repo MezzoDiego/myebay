@@ -45,6 +45,11 @@ public class Annuncio {
 		super();
 	}
 
+	public Annuncio(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public Annuncio(Long id, String testoAnnuncio, Integer prezzo, Date data, Boolean aperto, Utente utente) {
 		super();
 		this.id = id;
