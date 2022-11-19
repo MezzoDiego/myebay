@@ -18,8 +18,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Categoria> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Categoria>) repository.findAll();
 	}
 
 	@Override

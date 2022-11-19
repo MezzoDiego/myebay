@@ -1,4 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="it" class="h-100" >
 	 <head>
@@ -53,7 +56,6 @@
 				      <div class="container-fluid py-5">
 				        <h1 class="display-5 fw-bold">Benvenuto su MyEbay</h1>
 				        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. </p>
-				        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/annuncio/search">Ricerca annunci</a>
 				      </div>
 			    </div>
 			    
@@ -98,6 +100,45 @@
 			      </div>
 			    </div>
 			  </div>
+			  </sec:authorize>
+			  
+			  <sec:authorize access="!isAuthenticated()">
+			  <div class='card w-50 mx-auto '>
+			    <div class='card-header text-center'>
+			        <h5>Ricerca Annunci</h5> 
+			    </div>
+			    <div class='card-body'>
+	
+						<form method="post" action="${pageContext.request.contextPath}/annuncio/list" class="row g-3">
+						
+							<div class="col-md-6">
+								<label for="testo" class="form-label">Testo:</label>
+								<input type="text" name="testo" id="testo" class="form-control" placeholder="Inserire il testo dell'annuncio" >
+							</div>
+							
+							<div class="col-md-6">
+								<label for="prezzo" class="form-label">A partire da:</label>
+								<input type="number" name="prezzo" id="prezzo" class="form-control" placeholder="Inserire il prezzo di partenza" >
+							</div>
+							
+							<div class="col-md-6">
+									<label for="categorie" class="form-label">Seleziona categorie:</label><br>
+										<c:forEach items="${categorie_list_attribute }" var="categoriaItem">
+  									<input class="form-check-input" type="checkbox" id="categorie" name="categorie" value="${categoriaItem.id }"> ${categoriaItem.descrizione }<br>
+  										</c:forEach>
+								</div>
+							
+							<div class="col-12">	
+								<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary">Conferma</button>
+								<input class="btn btn-outline-warning" type="reset" value="Ripulisci">
+							</div>
+	
+							
+						</form>
+			    
+				<!-- end card-body -->			   
+			    </div>
+			</div>	
 			  </sec:authorize>
 			</main>
 			

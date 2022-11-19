@@ -49,6 +49,11 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<Annuncio> findByExample(Annuncio example) {
+		return repository.findByExample(example);
+	}
 	
 	
 }
