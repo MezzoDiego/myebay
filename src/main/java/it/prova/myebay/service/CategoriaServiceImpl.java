@@ -30,21 +30,30 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	@Override
+	@Transactional
 	public void aggiorna(Categoria categoriaInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void inserisciNuovo(Categoria categoriaInstance) {
+		repository.save(categoriaInstance);
+		
+	}
+
+	@Override
+	@Transactional
+	public void rimuovi(Long idToDelete) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void rimuovi(Long idToDelete) {
-		// TODO Auto-generated method stub
-		
+	@Transactional(readOnly = true)
+	public Categoria cercaPerDescrizioneECodice(String descrizione, String codice) {
+		return repository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
 }

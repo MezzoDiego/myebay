@@ -30,18 +30,21 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	}
 
 	@Override
+	@Transactional
 	public void aggiorna(Annuncio annuncioInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void inserisciNuovo(Annuncio annuncioInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void rimuovi(Long idToDelete) {
 		// TODO Auto-generated method stub
 		

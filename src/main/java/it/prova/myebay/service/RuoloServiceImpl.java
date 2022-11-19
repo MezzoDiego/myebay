@@ -30,21 +30,30 @@ public class RuoloServiceImpl implements RuoloService{
 	}
 
 	@Override
+	@Transactional
 	public void aggiorna(Ruolo ruoloInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void inserisciNuovo(Ruolo ruoloInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void rimuovi(Long idToDelete) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice) {
+		return repository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
 }

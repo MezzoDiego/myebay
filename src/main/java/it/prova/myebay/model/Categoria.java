@@ -30,6 +30,12 @@ public class Categoria {
 		this.descrizione = descrizione;
 		this.codice = codice;
 	}
+	
+	public Categoria(String descrizione, String codice) {
+		super();
+		this.descrizione = descrizione;
+		this.codice = codice;
+	}
 
 	public Long getId() {
 		return id;

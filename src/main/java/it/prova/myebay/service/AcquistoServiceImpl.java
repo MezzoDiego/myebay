@@ -30,18 +30,21 @@ public class AcquistoServiceImpl implements AcquistoService{
 	}
 
 	@Override
+	@Transactional
 	public void aggiorna(Acquisto acquistoInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void inserisciNuovo(Acquisto acquistoInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void rimuovi(Long idToDelete) {
 		// TODO Auto-generated method stub
 		

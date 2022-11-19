@@ -16,4 +16,6 @@ public interface RuoloService {
 
 	public void rimuovi(Long idToDelete);
 	
+	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice) ;
+	
 }
