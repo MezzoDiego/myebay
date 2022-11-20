@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.prova.myebay.dto.AcquistoDTO;
 import it.prova.myebay.dto.AnnuncioDTO;
 import it.prova.myebay.dto.CategoriaDTO;
 import it.prova.myebay.dto.RuoloDTO;
@@ -28,6 +29,7 @@ import it.prova.myebay.dto.UtenteDTO;
 import it.prova.myebay.exceptions.FondoInsufficienteException;
 import it.prova.myebay.model.Annuncio;
 import it.prova.myebay.model.Utente;
+import it.prova.myebay.service.AcquistoService;
 import it.prova.myebay.service.AnnuncioService;
 import it.prova.myebay.service.CategoriaService;
 import it.prova.myebay.validation.ValidationNoPassword;
@@ -42,6 +44,9 @@ public class AnnuncioController {
 
 	@Autowired
 	private CategoriaService categoriaService;
+	
+	@Autowired
+	private AcquistoService acquistoService;
 
 	@GetMapping
 	public ModelAndView listAllAnnunci() {
@@ -184,7 +189,8 @@ public class AnnuncioController {
 		}
 		
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
-		return "redirect:/acquisto";
+		model.addAttribute("acquisti_list_attribute", AcquistoDTO.createAcquistoDTOFromModelList(acquistoService.findAllAcquistiEagerUtente(utenteInSessione.getId()), true));
+		return "acquisto/list";
 	}
 
 }

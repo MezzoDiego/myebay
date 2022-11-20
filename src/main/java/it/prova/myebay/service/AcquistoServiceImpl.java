@@ -49,4 +49,14 @@ public class AcquistoServiceImpl implements AcquistoService{
 		
 	}
 
+	@Override
+	public List<Acquisto> findByExample(Acquisto example) {
+		return repository.findByExample(example);
+	}
+
+	@Override
+	public List<Acquisto> findAllAcquistiEagerUtente(Long id) {
+		return repository.findAcquistiUtente(id);
+	}
+
 }
