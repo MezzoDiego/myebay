@@ -22,6 +22,10 @@
 				  ${errorMessage}
 				</div>
 				
+				<div class="alert alert-success alert-dismissible fade show ${successMessage==null?'d-none': ''}" role="alert">
+				  ${successMessage}
+				</div>
+				
 				<div class="alert alert-info alert-dismissible fade show ${infoMessage==null?'d-none': ''}" role="alert">
 				  ${infoMessage}
 				</div>
@@ -46,7 +50,9 @@
 			      </label>
 			    </div>
 			    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-			    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+			    <p class="mt-5 mb-3 text-muted">&copy; 2022-2023</p>
+			    Not registered? 
+			    <a href="${pageContext.request.contextPath}/utente/insert">Click here</a>
 			  
 			  
 			  

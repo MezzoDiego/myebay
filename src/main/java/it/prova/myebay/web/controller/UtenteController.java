@@ -103,6 +103,25 @@ public class UtenteController {
 			return "redirect:/utente";
 		}
 		
+		@PostMapping("/saveSignUp")
+		public String saveSignUp(
+				@Validated({ ValidationWithPassword.class,
+						ValidationNoPassword.class }) @ModelAttribute("insert_utente_attr") UtenteDTO utenteDTO,
+				BindingResult result, Model model, RedirectAttributes redirectAttrs) {
+
+			if (result.hasErrors()) {
+				return "utente/insert";
+			}
+			
+			if (!result.hasFieldErrors("password") && !utenteDTO.getPassword().equals(utenteDTO.getConfermaPassword()))
+				result.rejectValue("confermaPassword", "Le password sono diverse");
+
+			utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(false));
+
+			redirectAttrs.addFlashAttribute("successMessage", "Registrato! Potrai accedere una volta che l'admin avra' abilitato il tuo account.");
+			return "redirect:/login";
+		}
+		
 		@GetMapping("/edit/{idUtente}")
 		public String edit(@PathVariable(required = true) Long idUtente, Model model) {
 			Utente utenteModel = utenteService.caricaSingoloUtenteConRuoli(idUtente);
