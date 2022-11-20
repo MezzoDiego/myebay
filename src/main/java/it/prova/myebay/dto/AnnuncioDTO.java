@@ -21,7 +21,7 @@ public class AnnuncioDTO {
 	private String testoAnnuncio;
 	@NotNull(message = "{prezzo.notnull}")
 	private Integer prezzo;
-	@NotNull(message = "{data.notnull}")
+	
 	private Date data;
 
 	private Boolean aperto;
