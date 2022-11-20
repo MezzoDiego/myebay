@@ -101,5 +101,27 @@ public class UtenteController {
 			redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 			return "redirect:/utente";
 		}
+		
+		@GetMapping("/edit/{idUtente}")
+		public String edit(@PathVariable(required = true) Long idUtente, Model model) {
+			Utente utenteModel = utenteService.caricaSingoloUtenteConRuoli(idUtente);
+			model.addAttribute("edit_utente_attr", UtenteDTO.buildUtenteDTOFromModel(utenteModel,true));
+			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
+			return "utente/edit";
+		}
+		
+		@PostMapping("/update")
+		public String update(@Validated(ValidationNoPassword.class) @ModelAttribute("edit_utente_attr") UtenteDTO utenteDTO,
+				BindingResult result, Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+
+			if (result.hasErrors()) {
+				model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
+				return "utente/edit";
+			}
+			utenteService.aggiorna(utenteDTO.buildUtenteModel(true));
+
+			redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+			return "redirect:/utente";
+		}
 	
 }
