@@ -55,4 +55,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return repository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
+	@Override
+	public List<Categoria> cercaCategorieByIds(Long[] ids) {
+		return repository.findAllCategorieByIds(ids);
+	}
+
 }

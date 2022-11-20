@@ -9,6 +9,8 @@ public interface AnnuncioService {
 	public List<Annuncio> listAll();
 
 	public Annuncio caricaSingoloElemento(Long id);
+	
+	public Annuncio caricaSingoloElementoConCategorie(Long id);
 
 	public void aggiorna(Annuncio annuncioInstance);
 

@@ -27,6 +27,8 @@ public class AnnuncioDTO {
 	private Boolean aperto;
 
 	private UtenteDTO utente;
+	
+	private Long[] categorieIds;
 
 	public AnnuncioDTO() {
 		super();
@@ -98,26 +100,38 @@ public class AnnuncioDTO {
 	public void setUtente(UtenteDTO utente) {
 		this.utente = utente;
 	}
+	
+	public Long[] getCategorieIds() {
+		return categorieIds;
+	}
+
+	public void setCategorieIds(Long[] categorieIds) {
+		this.categorieIds = categorieIds;
+	}
 
 	public Annuncio buildAnnuncioModel() {
 		return new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto,
 				this.utente.buildUtenteModel(false));
 	}
 
-	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio annuncioModel, boolean includeUtente) {
+	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio annuncioModel, boolean includeUtente, boolean includeCategorie) {
 		AnnuncioDTO result = new AnnuncioDTO(annuncioModel.getId(), annuncioModel.getTestoAnnuncio(),
 				annuncioModel.getPrezzo(), annuncioModel.getData(), annuncioModel.getAperto());
 
 		if (includeUtente)
 			result.setUtente(UtenteDTO.buildUtenteDTOFromModel(annuncioModel.getUtente(), false));
+		
+		if (annuncioModel.getCategorie() != null && includeCategorie && !annuncioModel.getCategorie().isEmpty())
+			result.categorieIds = annuncioModel.getCategorie().stream().map(r -> r.getId()).collect(Collectors.toList())
+					.toArray(new Long[] {});
 
 		return result;
 	}
 
 	public static List<AnnuncioDTO> createAnnuncioDTOFromModelList(List<Annuncio> modelListInput,
-			boolean includeUtente) {
+			boolean includeUtente, boolean includeCategorie) {
 		return modelListInput.stream().map(annuncioEntity -> {
-			return AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioEntity, includeUtente);
+			return AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioEntity, includeUtente, includeCategorie);
 		}).collect(Collectors.toList());
 	}
 

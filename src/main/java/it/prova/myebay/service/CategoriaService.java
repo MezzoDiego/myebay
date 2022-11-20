@@ -17,6 +17,8 @@ public interface CategoriaService {
 	public void rimuovi(Long idToDelete);
 	
 	public Categoria cercaPerDescrizioneECodice(String descrizione, String codice) ;
+	
+	public List<Categoria> cercaCategorieByIds(Long[] ids);
 
 	
 }
