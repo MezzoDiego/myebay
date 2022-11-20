@@ -18,8 +18,7 @@ public class RuoloServiceImpl implements RuoloService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Ruolo> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Ruolo>) repository.findAll();
 	}
 
 	@Override
