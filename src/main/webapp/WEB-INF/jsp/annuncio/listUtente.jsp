@@ -53,6 +53,7 @@
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/annuncio/showUtente/${annuncioItem.id }">Visualizza</a>
 											<c:if test="${annuncioItem.aperto}">
+												<a class="btn btn-sm btn-outline-primary" href="${pageContext.request.contextPath}/annuncio/edit/${annuncioItem.id }">Modifica</a>
 												<a class="btn btn-sm btn-outline-danger" href="${pageContext.request.contextPath}/annuncio/delete/${annuncioItem.id }">Elimina</a>
 											</c:if>
 										</td>

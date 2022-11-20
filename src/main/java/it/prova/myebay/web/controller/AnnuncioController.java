@@ -141,5 +141,29 @@ public class AnnuncioController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
 	}
+	
+	@GetMapping("/edit/{idAnnuncio}")
+	public String edit(@PathVariable(required = true) Long idAnnuncio, Model model, HttpServletRequest request) {
+		AnnuncioDTO annuncioDTO = AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio), false, true);
+		model.addAttribute("edit_annuncio_attr", annuncioDTO);
+		model.addAttribute("categorie_totali_attr", CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
+		return "annuncio/edit";
+	}
+	
+	@PostMapping("/update")
+	public String update(@Valid @ModelAttribute("edit_annuncio_attr") AnnuncioDTO annuncioDTO,
+			BindingResult result, Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+
+		if (result.hasErrors()) {
+			model.addAttribute("categorie_totali_attr", CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
+			return "annuncio/edit";
+		}
+		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
+		annuncioDTO.setUtente(utenteInSessione);
+		annuncioService.aggiorna(annuncioDTO.buildAnnuncioModel(true));
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/annuncio/listUtente";
+	}
 
 }
