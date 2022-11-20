@@ -7,14 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.myebay.exceptions.FondoInsufficienteException;
+import it.prova.myebay.model.Acquisto;
 import it.prova.myebay.model.Annuncio;
+import it.prova.myebay.model.Utente;
+import it.prova.myebay.repository.acquisto.AcquistoRepository;
 import it.prova.myebay.repository.annuncio.AnnuncioRepository;
+import it.prova.myebay.repository.utente.UtenteRepository;
 
 @Service
 public class AnnuncioServiceImpl implements AnnuncioService{
 
 	@Autowired
 	private AnnuncioRepository repository;
+	
+	@Autowired
+	private UtenteRepository utenteRepository;
+	
+	@Autowired
+	private AcquistoRepository acquistoRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -72,6 +83,35 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	@Override
 	public Annuncio caricaSingoloElementoConCategorie(Long id) {
 		return repository.findByIdConCategorie(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void acquista(Long id, Utente utenteInstance) {
+		Annuncio annuncioDaAcquistare = repository.findById(id).orElse(null);
+		Utente utenteReloaded = utenteRepository.findById(id).orElse(null);
+		
+		if(annuncioDaAcquistare == null)
+			throw new RuntimeException("Annuncio non trovato.");
+		
+		if(utenteReloaded == null)
+			throw new RuntimeException("Utente non trovato.");
+		
+		if(utenteInstance.getCreditoResiduo() < annuncioDaAcquistare.getPrezzo())
+			throw new FondoInsufficienteException("Credito residuo insufficiente per effettuare l'acquisto.");
+		
+		int creditoAggiornato = utenteInstance.getCreditoResiduo() - annuncioDaAcquistare.getPrezzo();
+		
+		utenteReloaded.setCreditoResiduo(creditoAggiornato);
+		utenteRepository.save(utenteReloaded);
+		
+		annuncioDaAcquistare.setAperto(false);
+		
+		Acquisto nuovoAcquisto = new Acquisto(annuncioDaAcquistare.getTestoAnnuncio(), new Date(), annuncioDaAcquistare.getPrezzo(), utenteInstance);
+		
+		acquistoRepository.save(nuovoAcquisto);
+		
+		
 	}
 	
 	

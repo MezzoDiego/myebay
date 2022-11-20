@@ -25,6 +25,7 @@ import it.prova.myebay.dto.AnnuncioDTO;
 import it.prova.myebay.dto.CategoriaDTO;
 import it.prova.myebay.dto.RuoloDTO;
 import it.prova.myebay.dto.UtenteDTO;
+import it.prova.myebay.exceptions.FondoInsufficienteException;
 import it.prova.myebay.model.Annuncio;
 import it.prova.myebay.model.Utente;
 import it.prova.myebay.service.AnnuncioService;
@@ -164,6 +165,26 @@ public class AnnuncioController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
+	}
+	
+	@PostMapping("/acquista")
+	public String acquisto(@RequestParam Long idAnnuncioForAcquisto, Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+
+		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
+		
+		try {
+			annuncioService.acquista(idAnnuncioForAcquisto, utenteInSessione.buildUtenteModel(false));
+		}catch(FondoInsufficienteException ex){
+			redirectAttrs.addFlashAttribute("errorMessage", "Credito insufficiente.");
+			return "redirect:/annuncio";
+		}catch(Exception e) {
+			e.printStackTrace();
+			redirectAttrs.addFlashAttribute("errorMessage", "Si e' verificato un errore.");
+			return "redirect:/annuncio";
+		}
+		
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/acquisto";
 	}
 
 }

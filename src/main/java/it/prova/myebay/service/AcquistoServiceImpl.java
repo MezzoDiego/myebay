@@ -18,8 +18,7 @@ public class AcquistoServiceImpl implements AcquistoService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<Acquisto> listAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Acquisto>) repository.findAll();
 	}
 
 	@Override
