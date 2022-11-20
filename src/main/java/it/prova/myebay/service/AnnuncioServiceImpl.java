@@ -1,5 +1,6 @@
 package it.prova.myebay.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	@Override
 	@Transactional
 	public void inserisciNuovo(Annuncio annuncioInstance) {
-		// TODO Auto-generated method stub
+		annuncioInstance.setData(new Date());
+		annuncioInstance.setAperto(true);
+		repository.save(annuncioInstance);
 		
 	}
 

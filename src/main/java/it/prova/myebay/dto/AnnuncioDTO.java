@@ -1,5 +1,6 @@
 package it.prova.myebay.dto;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,8 @@ import javax.validation.constraints.Size;
 
 import it.prova.myebay.model.Acquisto;
 import it.prova.myebay.model.Annuncio;
+import it.prova.myebay.model.Categoria;
+import it.prova.myebay.model.Ruolo;
 import it.prova.myebay.model.Utente;
 
 public class AnnuncioDTO {
@@ -109,9 +112,14 @@ public class AnnuncioDTO {
 		this.categorieIds = categorieIds;
 	}
 
-	public Annuncio buildAnnuncioModel() {
-		return new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto,
+	public Annuncio buildAnnuncioModel(boolean includeIdCategorie) {
+		Annuncio result = new Annuncio(this.id, this.testoAnnuncio, this.prezzo, this.data, this.aperto,
 				this.utente.buildUtenteModel(false));
+		
+		if (includeIdCategorie && categorieIds != null)
+			result.setCategorie(Arrays.asList(categorieIds).stream().map(id -> new Categoria(id)).collect(Collectors.toSet()));
+		
+		return result;
 	}
 
 	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio annuncioModel, boolean includeUtente, boolean includeCategorie) {
