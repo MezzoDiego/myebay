@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -119,6 +120,24 @@ public class AnnuncioController {
 		annuncioDTO.setUtente(utenteInSessione);
 		annuncioService.inserisciNuovo(annuncioDTO.buildAnnuncioModel(true));
 
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/annuncio/listUtente";
+	}
+	
+	@GetMapping("/delete/{idAnnuncio}")
+	public String delete(@PathVariable(required = true) Long idAnnuncio, Model model, HttpServletRequest request) {
+		AnnuncioDTO annuncioDTO = AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio), false, true);
+		model.addAttribute("delete_annuncio_attr", annuncioDTO);
+		model.addAttribute("categorie_annuncio_attr", CategoriaDTO
+				.createCategoriaDTOListFromModelList(categoriaService.cercaCategorieByIds(annuncioDTO.getCategorieIds())));
+		return "annuncio/delete";
+	}
+	
+	@PostMapping("/remove")
+	public String remove(@RequestParam Long idAnnuncio, RedirectAttributes redirectAttrs) {
+
+		annuncioService.rimuovi(idAnnuncio);
+		
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
 	}

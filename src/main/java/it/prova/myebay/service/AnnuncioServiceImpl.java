@@ -48,7 +48,7 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	@Override
 	@Transactional
 	public void rimuovi(Long idToDelete) {
-		// TODO Auto-generated method stub
+		repository.deleteById(idToDelete);
 		
 	}
 
