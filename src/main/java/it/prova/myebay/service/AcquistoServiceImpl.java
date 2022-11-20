@@ -24,8 +24,7 @@ public class AcquistoServiceImpl implements AcquistoService{
 	@Override
 	@Transactional(readOnly = true)
 	public Acquisto caricaSingoloElemento(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).orElse(null);
 	}
 
 	@Override
