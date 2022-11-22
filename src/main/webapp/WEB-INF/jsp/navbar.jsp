@@ -39,10 +39,16 @@
         </ul>
       </div>
       <sec:authorize access="isAuthenticated()">
-	      <div class="col-md-3 text-end">
-	        <p class="navbar-text">Utente: <sec:authentication property="name"/> (${userInfo.nome } ${userInfo.cognome })
-	    	 <a href="${pageContext.request.contextPath}/logout">Logout</a></p>
+	      <div class="col-md-3">
+	        <p class="navbar-text">Utente: <sec:authentication property="name"/> (${userInfo.nome } ${userInfo.cognome })</p>
 	      </div>
+	       <li class="nav-item dropdown " style="color: transparent;">
+            <a class="nav-link active dropdown-toggle" style="color: white;" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Action</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown07">
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/reset">Reset Password</a></li>
+            </ul>
+            </li>
       </sec:authorize>
       
       <sec:authorize access="!isAuthenticated()">

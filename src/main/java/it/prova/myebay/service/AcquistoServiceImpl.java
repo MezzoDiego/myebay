@@ -28,8 +28,16 @@ public class AcquistoServiceImpl implements AcquistoService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public Acquisto caricaSingoloElemento(Long id) {
-		return repository.findById(id).orElse(null);
+	public Acquisto caricaSingoloElemento(Long id, String username) {
+		Acquisto acquisto = repository.findById(id).orElse(null);
+		
+		if(username == null)
+			throw new RuntimeException("Username null.");
+		
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		acquisto.setUtente(utenteInSessione);
+		
+		return acquisto;
 	}
 
 	@Override
@@ -54,7 +62,13 @@ public class AcquistoServiceImpl implements AcquistoService{
 	}
 
 	@Override
-	public List<Acquisto> findByExample(Acquisto example) {
+	public List<Acquisto> findByExample(Acquisto example, String username) {
+		if(username == null)
+			throw new RuntimeException("Username null.");
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		example.setUtente(utenteInSessione);
+		
+		
 		return repository.findByExample(example);
 	}
 

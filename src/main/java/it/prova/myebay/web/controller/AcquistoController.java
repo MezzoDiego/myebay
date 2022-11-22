@@ -1,5 +1,7 @@
 package it.prova.myebay.web.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +35,9 @@ public class AcquistoController {
 	}
 	
 	@RequestMapping("/list")
-	public String listAcquisti(Acquisto acquistoExample, ModelMap model, HttpServletRequest request) {
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		acquistoExample.setUtente(utenteInSessione.buildUtenteModel(false));
+	public String listAcquisti(Acquisto acquistoExample, ModelMap model, HttpServletRequest request, Principal principal) {
 		model.addAttribute("acquisti_list_attribute", AcquistoDTO
-				.createAcquistoDTOFromModelList(acquistoService.findByExample(acquistoExample), true));
+				.createAcquistoDTOFromModelList(acquistoService.findByExample(acquistoExample, principal.getName()), true));
 
 		return "acquisto/list";
 	}
@@ -49,10 +49,8 @@ public class AcquistoController {
 	
 	@GetMapping("/show/{idAcquisto}")
 	public String showAnnuncio(HttpServletRequest request, @PathVariable(required = true) Long idAcquisto,
-			Model model) {
-		Acquisto acquistoModel = acquistoService.caricaSingoloElemento(idAcquisto);
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		acquistoModel.setUtente(utenteInSessione.buildUtenteModel(false));
+			Model model, Principal principal) {
+		Acquisto acquistoModel = acquistoService.caricaSingoloElemento(idAcquisto, principal.getName());
 		AcquistoDTO result = AcquistoDTO.buildAcquistoDTOFromModel(acquistoModel, true);
 		model.addAttribute("show_acquisto_attr", result);
 		return "acquisto/show";

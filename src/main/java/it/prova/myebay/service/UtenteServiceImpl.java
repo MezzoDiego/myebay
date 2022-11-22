@@ -112,4 +112,19 @@ public class UtenteServiceImpl implements UtenteService {
 		return repository.findByUsername(username).orElse(null);
 	}
 
+	@Override
+	public void resetPassword(String username, String nuovaPassword) {
+		if(username == null)
+			throw new RuntimeException("Username null.");
+		if(nuovaPassword == null)
+			throw new RuntimeException("Password null.");
+		
+		Utente utenteInSessione = repository.findByUsername(username).orElse(null);
+		Utente utenteReloaded = repository.findById(utenteInSessione.getId()).orElse(null);
+		
+		utenteReloaded.setPassword(passwordEncoder.encode(nuovaPassword));
+		repository.save(utenteReloaded);
+		
+	}
+
 }

@@ -8,7 +8,7 @@ public interface AcquistoService {
 
 	public List<Acquisto> listAll();
 
-	public Acquisto caricaSingoloElemento(Long id);
+	public Acquisto caricaSingoloElemento(Long id, String username);
 
 	public void aggiorna(Acquisto acquistoInstance);
 
@@ -16,7 +16,7 @@ public interface AcquistoService {
 
 	public void rimuovi(Long idToDelete);
 	
-	public List<Acquisto> findByExample(Acquisto example);
+	public List<Acquisto> findByExample(Acquisto example, String username);
 	
 	public List<Acquisto> findAllAcquistiEagerUtente(String username);
 }
