@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Value(value = "${utente.password.reset.value}")
+	private String password;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -113,6 +117,7 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Override
+	@Transactional
 	public void resetPassword(String username, String nuovaPassword) {
 		if(username == null)
 			throw new RuntimeException("Username null.");
@@ -124,6 +129,18 @@ public class UtenteServiceImpl implements UtenteService {
 		
 		utenteReloaded.setPassword(passwordEncoder.encode(nuovaPassword));
 		repository.save(utenteReloaded);
+		
+	}
+
+	@Override
+	@Transactional
+	public void resetPasswordAdmin(Long id) {
+		if(id == null)
+			throw new RuntimeException("id = null");
+		
+		Utente utentePerResetPassword = repository.findById(id).orElse(null);
+		utentePerResetPassword.setPassword(passwordEncoder.encode(password));
+		repository.save(utentePerResetPassword);
 		
 	}
 

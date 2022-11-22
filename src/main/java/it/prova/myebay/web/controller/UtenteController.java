@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -37,7 +39,10 @@ public class UtenteController {
 
 	@Autowired
 	private RuoloService ruoloService;
-
+	
+	@Value(value = "${utente.password.reset.value}")
+	private String password;
+	
 	@GetMapping
 	public ModelAndView listAllUtenti() {
 		ModelAndView mv = new ModelAndView();
@@ -63,6 +68,13 @@ public class UtenteController {
 	@PostMapping("/cambiaStato")
 	public String cambiaStato(@RequestParam(name = "idUtenteForChangingStato", required = true) Long idUtente) {
 		utenteService.changeUserAbilitation(idUtente);
+		return "redirect:/utente";
+	}
+	
+	@PostMapping("/resetPassword")
+	public String resetPassword(@RequestParam(name = "idUtenteForResetPassword", required = true) Long idUtente, Model model, RedirectAttributes redirectAttrs) {
+		utenteService.resetPasswordAdmin(idUtente);
+		redirectAttrs.addFlashAttribute("successMessage", "Password resettata con successo");
 		return "redirect:/utente";
 	}
 	
