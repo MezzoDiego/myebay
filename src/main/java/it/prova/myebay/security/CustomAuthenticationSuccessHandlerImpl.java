@@ -36,10 +36,8 @@ public class CustomAuthenticationSuccessHandlerImpl implements AuthenticationSuc
 		Utente utenteFromDb = utenteRepository.findByUsername(authentication.getName()).orElseThrow(
 				() -> new UsernameNotFoundException("Username " + authentication.getName() + " not found"));
 		UtenteDTO utenteParziale = new UtenteDTO();
-		utenteParziale.setId(utenteFromDb.getId());
 		utenteParziale.setNome(utenteFromDb.getNome());
 		utenteParziale.setCognome(utenteFromDb.getCognome());
-		utenteParziale.setCreditoResiduo(utenteFromDb.getCreditoResiduo());
 		request.getSession().setAttribute("userInfo", utenteParziale);
 
 		String idAnnuncioWithNoAuthParam = request.getParameter("idAnnuncioWithNoAuth");

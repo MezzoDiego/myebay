@@ -52,17 +52,15 @@ public class AnnuncioController {
 	}
 
 	@RequestMapping("/list")
-	public String listAnnunci(Annuncio annuncioExample, ModelMap model, HttpServletRequest request) {
+	public String listAnnunci(Annuncio annuncioExample, ModelMap model, HttpServletRequest request, Principal principal) {
 
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
 
-		if (utenteInSessione == null) {
+		if (principal == null) {
 			model.addAttribute("annunci_list_attribute", AnnuncioDTO
-					.createAnnuncioDTOFromModelList(annuncioService.findByExample(annuncioExample), false, false));
+					.createAnnuncioDTOFromModelList(annuncioService.findByExample(annuncioExample, null), false, false));
 		} else {
-			annuncioExample.setUtente(utenteInSessione.buildUtenteModel(false));
 			model.addAttribute("annunci_list_attribute", AnnuncioDTO
-					.createAnnuncioDTOFromModelList(annuncioService.findByExample(annuncioExample), true, false));
+					.createAnnuncioDTOFromModelList(annuncioService.findByExample(annuncioExample, principal.getName()), true, false));
 		}
 
 		return "annuncio/list";
@@ -70,7 +68,7 @@ public class AnnuncioController {
 
 	@GetMapping("/show/{idAnnuncio}")
 	public String showAnnuncio(@PathVariable(required = true) Long idAnnuncio, Model model) {
-		Annuncio annuncioModel = annuncioService.caricaSingoloElementoConCategorie(idAnnuncio);
+		Annuncio annuncioModel = annuncioService.caricaSingoloElementoConCategorie(idAnnuncio, null);
 		AnnuncioDTO result = AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioModel, false, true);
 		model.addAttribute("show_annuncio_attr", result);
 		model.addAttribute("categorie_annuncio_attr", CategoriaDTO
@@ -80,10 +78,8 @@ public class AnnuncioController {
 
 	@GetMapping("/showUtente/{idAnnuncio}")
 	public String showAnnuncio(HttpServletRequest request, @PathVariable(required = true) Long idAnnuncio,
-			Model model) {
-		Annuncio annuncioModel = annuncioService.caricaSingoloElementoConCategorie(idAnnuncio);
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		annuncioModel.setUtente(utenteInSessione.buildUtenteModel(false));
+			Model model, Principal principal) {
+		Annuncio annuncioModel = annuncioService.caricaSingoloElementoConCategorie(idAnnuncio, principal.getName());
 		AnnuncioDTO result = AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioModel, true, true);
 		model.addAttribute("show_annuncio_attr", result);
 		model.addAttribute("categorie_annuncio_attr", CategoriaDTO
@@ -99,11 +95,9 @@ public class AnnuncioController {
 	}
 
 	@RequestMapping("/listUtente")
-	public String listAnnunciUtente(HttpServletRequest request, Annuncio annuncioExample, ModelMap model) {
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		annuncioExample.setUtente(utenteInSessione.buildUtenteModel(false));
+	public String listAnnunciUtente(HttpServletRequest request, Annuncio annuncioExample, ModelMap model, Principal principal) {
 		model.addAttribute("annunci_list_attribute", AnnuncioDTO
-				.createAnnuncioDTOFromModelList(annuncioService.findByExampleEager(annuncioExample), true, false));
+				.createAnnuncioDTOFromModelList(annuncioService.findByExampleEager(annuncioExample, principal.getName()), true, false));
 
 		return "annuncio/listUtente";
 	}
@@ -118,16 +112,14 @@ public class AnnuncioController {
 
 	@PostMapping("/save")
 	public String save(@Valid @ModelAttribute("insert_annuncio_attr") AnnuncioDTO annuncioDTO, BindingResult result,
-			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request, Principal principal) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("categorie_totali_attr",
 					CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
 			return "annuncio/insert";
 		}
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		annuncioDTO.setUtente(utenteInSessione);
-		annuncioService.inserisciNuovo(annuncioDTO.buildAnnuncioModel(true));
+		annuncioService.inserisciNuovo(annuncioDTO.buildAnnuncioModel(true), principal.getName());
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
@@ -136,7 +128,7 @@ public class AnnuncioController {
 	@GetMapping("/delete/{idAnnuncio}")
 	public String delete(@PathVariable(required = true) Long idAnnuncio, Model model, HttpServletRequest request) {
 		AnnuncioDTO annuncioDTO = AnnuncioDTO
-				.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio), false, true);
+				.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio, null), false, true);
 		model.addAttribute("delete_annuncio_attr", annuncioDTO);
 		model.addAttribute("categorie_annuncio_attr", CategoriaDTO.createCategoriaDTOListFromModelList(
 				categoriaService.cercaCategorieByIds(annuncioDTO.getCategorieIds())));
@@ -155,7 +147,7 @@ public class AnnuncioController {
 	@GetMapping("/edit/{idAnnuncio}")
 	public String edit(@PathVariable(required = true) Long idAnnuncio, Model model, HttpServletRequest request) {
 		AnnuncioDTO annuncioDTO = AnnuncioDTO
-				.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio), false, true);
+				.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloElementoConCategorie(idAnnuncio, null), false, true);
 		model.addAttribute("edit_annuncio_attr", annuncioDTO);
 		model.addAttribute("categorie_totali_attr",
 				CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
@@ -164,16 +156,14 @@ public class AnnuncioController {
 
 	@PostMapping("/update")
 	public String update(@Valid @ModelAttribute("edit_annuncio_attr") AnnuncioDTO annuncioDTO, BindingResult result,
-			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request, Principal principal) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("categorie_totali_attr",
 					CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
 			return "annuncio/edit";
 		}
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
-		annuncioDTO.setUtente(utenteInSessione);
-		annuncioService.aggiorna(annuncioDTO.buildAnnuncioModel(true));
+		annuncioService.aggiorna(annuncioDTO.buildAnnuncioModel(true), principal.getName());
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/annuncio/listUtente";
@@ -181,12 +171,10 @@ public class AnnuncioController {
 
 	@PostMapping("/acquista")
 	public String acquisto(@RequestParam Long idAnnuncioForAcquisto, Model model, RedirectAttributes redirectAttrs,
-			HttpServletRequest request) {
-
-		UtenteDTO utenteInSessione = (UtenteDTO) request.getSession().getAttribute("userInfo");
+			HttpServletRequest request, Principal principal) {
 
 		try {
-			annuncioService.acquista(idAnnuncioForAcquisto, utenteInSessione.buildUtenteModel(false));
+			annuncioService.acquista(idAnnuncioForAcquisto, principal.getName());
 		} catch (FondoInsufficienteException ex) {
 			redirectAttrs.addFlashAttribute("errorMessage", "Credito insufficiente.");
 			return "redirect:/annuncio";
@@ -198,7 +186,7 @@ public class AnnuncioController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		model.addAttribute("acquisti_list_attribute", AcquistoDTO.createAcquistoDTOFromModelList(
-				acquistoService.findAllAcquistiEagerUtente(utenteInSessione.getId()), true));
+				acquistoService.findAllAcquistiEagerUtente(principal.getName()), true));
 		return "acquisto/list";
 	}
 
@@ -207,7 +195,7 @@ public class AnnuncioController {
 			Model model, RedirectAttributes redirectAttrs,HttpServletRequest request, Principal principal) {
 		System.out.println("maledetto   "+idAnnuncioWithNoAuth);
 		if (principal != null) {
-			return this.acquisto(idAnnuncioWithNoAuth, model, redirectAttrs, request);
+			return this.acquisto(idAnnuncioWithNoAuth, model, redirectAttrs, request, principal);
 		}
 		model.addAttribute("idAnnuncioWithNoAuth", idAnnuncioWithNoAuth);
 		return "/login";
