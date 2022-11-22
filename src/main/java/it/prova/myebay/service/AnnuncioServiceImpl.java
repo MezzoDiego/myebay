@@ -45,14 +45,15 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 		Annuncio annuncioReloaded = repository.findById(annuncioInstance.getId()).orElse(null);
 		if(annuncioReloaded == null)
 			throw new RuntimeException("Elemento non trovato");
+		if(username == null)
+			throw new RuntimeException("Username non trovato!");
 		
 		annuncioReloaded.setTestoAnnuncio(annuncioInstance.getTestoAnnuncio());
 		annuncioReloaded.setCategorie(annuncioInstance.getCategorie());
 		annuncioReloaded.setPrezzo(annuncioInstance.getPrezzo());
-		if(username != null) {
-			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
-			annuncioReloaded.setUtente(utenteInSessione);
-			}
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		annuncioReloaded.setUtente(utenteInSessione);
+			
 		repository.save(annuncioReloaded);
 		
 	}
@@ -60,12 +61,15 @@ public class AnnuncioServiceImpl implements AnnuncioService{
 	@Override
 	@Transactional
 	public void inserisciNuovo(Annuncio annuncioInstance, String username) {
+		
+		if(username == null)
+			throw new RuntimeException("Username non trovato.");
+		
 		annuncioInstance.setData(new Date());
 		annuncioInstance.setAperto(true);
-		if(username != null) {
-			Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
-			annuncioInstance.setUtente(utenteInSessione);
-		}
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		annuncioInstance.setUtente(utenteInSessione);
+		
 		repository.save(annuncioInstance);
 		
 	}
