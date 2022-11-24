@@ -60,7 +60,7 @@ public class CustomAnnuncioRepositoryImpl implements CustomAnnuncioRepository{
 		StringBuilder queryBuilder = new StringBuilder("select distinct a from Annuncio a join a.utente u left join a.categorie c where a.id = a.id ");
 
 		if (StringUtils.isNotEmpty(example.getTestoAnnuncio())) {
-			whereClauses.add(" a.testoAnnuncio  like :testoAnnuncio ");
+			whereClauses.add(" a.testoAnnuncio like :testoAnnuncio ");
 			paramaterMap.put("testoAnnuncio", "%" + example.getTestoAnnuncio() + "%");
 		}
 		if (example.getPrezzo() != null) {

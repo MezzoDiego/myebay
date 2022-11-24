@@ -31,8 +31,8 @@
 						<form method="post" action="${pageContext.request.contextPath}/annuncio/listUtente" class="row g-3">
 						
 							<div class="col-md-6">
-								<label for="testo" class="form-label">Testo:</label>
-								<input type="text" name="testo" id="testo" class="form-control" placeholder="Inserire il testo dell'annuncio" >
+								<label for="testoAnnuncio" class="form-label">Testo:</label>
+								<input type="text" name="testoAnnuncio" id="testoAnnuncio" class="form-control" placeholder="Inserire il testo dell'annuncio" >
 							</div>
 							
 							<div class="col-md-6">

@@ -95,7 +95,7 @@ public class AnnuncioController {
 	}
 
 	@RequestMapping("/listUtente")
-	public String listAnnunciUtente(HttpServletRequest request, Annuncio annuncioExample, ModelMap model, Principal principal) {
+	public String listAnnunciUtente(Annuncio annuncioExample, ModelMap model, Principal principal) {
 		model.addAttribute("annunci_list_attribute", AnnuncioDTO
 				.createAnnuncioDTOFromModelList(annuncioService.findByExampleEager(annuncioExample, principal.getName()), true, false));
 
